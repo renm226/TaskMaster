@@ -62,6 +62,11 @@ class TaskDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return db.delete(TABLE_TASKS, "$COLUMN_ID = ?", arrayOf(id.toString()))
     }
 
+    fun getTaskById(id: Int): Cursor = readableDatabase.rawQuery(
+        "SELECT * FROM $TABLE_TASKS WHERE $COLUMN_ID = ?",
+        arrayOf(id.toString())
+    )
+
     fun updateCompleted(id: Int, completed: Boolean): Int {
         val db = writableDatabase
         val values = ContentValues().apply {

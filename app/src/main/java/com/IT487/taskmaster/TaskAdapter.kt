@@ -32,6 +32,8 @@ class TaskAdapter(
         holder.tvTitle.text = task.title
         holder.tvDueDate.text = "Due: ${task.dueDate}"
         holder.tvPriority.text = task.priority
+
+        holder.cbCompleted.setOnCheckedChangeListener(null)
         holder.cbCompleted.isChecked = task.isCompleted
 
         val color = when (task.priority) {
@@ -43,6 +45,9 @@ class TaskAdapter(
 
         if (task.isCompleted) {
             holder.tvTitle.paintFlags = holder.tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            holder.tvTitle.paintFlags =
+                holder.tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
         holder.itemView.setOnClickListener { onItemClick(task) }

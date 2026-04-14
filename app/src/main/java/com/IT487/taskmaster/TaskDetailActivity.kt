@@ -23,16 +23,22 @@ class TaskDetailActivity : AppCompatActivity() {
         val btnDelete = findViewById<Button>(R.id.btnDelete)
 
         val dbHelper = TaskDbHelper(this)
-        val cursor = dbHelper.getAllTasks()
+        val cursor = dbHelper.getTaskById(taskId)
 
-        while (cursor.moveToNext()) {
-            if (cursor.getInt(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_ID)) == taskId) {
-                tvTitle.text = cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_TITLE))
-                tvDesc.text = cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_DESCRIPTION)) ?: "No description"
-                tvDue.text = "Due: " + (cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_DUE_DATE)) ?: "No date")
-                tvPriority.text = "Priority: " + (cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_PRIORITY)) ?: "Medium")
-                break
-            }
+        if (cursor.moveToFirst()) {
+            tvTitle.text = cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_TITLE))
+            tvDesc.text =
+                cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_DESCRIPTION))
+                    ?: "No description"
+            tvDue.text =
+                "Due: " + (cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_DUE_DATE))
+                    ?: "No date")
+            tvPriority.text =
+                "Priority: " + (cursor.getString(cursor.getColumnIndexOrThrow(TaskDbHelper.COLUMN_PRIORITY))
+                    ?: "Medium")
+        } else {
+            Toast.makeText(this, "Task not found", Toast.LENGTH_SHORT).show()
+            finish()
         }
         cursor.close()
 
